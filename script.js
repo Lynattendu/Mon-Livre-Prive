@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
      RÉGLAGES
   ======================================================= */
 
-  const CODE_ACCES = "Promethee2026";
+  const CODE_ACCES = "Maperledamour";
 
   const STORAGE_KEY = "monLivrePrive_chapitres";
 
