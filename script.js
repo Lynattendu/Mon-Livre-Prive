@@ -1,6 +1,6 @@
 
 /* =========================================================
-   MON LIVRE PRIVÉ
+   MA BIBLIOTHÈQUE PRIVÉE
    SCRIPT PRINCIPAL
 ========================================================= */
 
@@ -10,47 +10,157 @@ document.addEventListener("DOMContentLoaded", () => {
      RÉGLAGES
   ======================================================= */
 
-  const CODE_ACCES = "Maperledamour"; 
+  const CODE_ACCES = "Maperledamour";
 
-  const STORAGE_KEY = "monLivrePrive_chapitres";
+  const STORAGE_LIBRARY = "maBibliothequePrivee_livres";
+  const STORAGE_LEGACY = "monLivrePrive_chapitres";
 
+  const SESSION_UNLOCKED = "maBibliothequePrivee_deverrouille";
+
+  let livreEnCoursId = null;
   let chapitreEnCoursId = null;
+
+  let livreEditeId = null;
+
   let fichierImporte = null;
 
 
   /* =======================================================
-     ÉLÉMENTS
+     ÉLÉMENTS PRINCIPAUX
   ======================================================= */
 
-  const screens = document.querySelectorAll(".screen");
+  const screens =
+    document.querySelectorAll(".screen");
 
-  const lockScreen = document.getElementById("lockScreen");
-  const homeScreen = document.getElementById("homeScreen");
-  const editorScreen = document.getElementById("editorScreen");
-  const chaptersScreen = document.getElementById("chaptersScreen");
-  const readerScreen = document.getElementById("readerScreen");
-  const backupScreen = document.getElementById("backupScreen");
+  const lockScreen =
+    document.getElementById("lockScreen");
 
-  const accessCode = document.getElementById("accessCode");
-  const unlockBtn = document.getElementById("unlockBtn");
-  const codeError = document.getElementById("codeError");
+  const libraryScreen =
+    document.getElementById("libraryScreen");
 
-  const lockBtn = document.getElementById("lockBtn");
+  const bookEditorScreen =
+    document.getElementById("bookEditorScreen");
 
-  const newChapterBtn = document.getElementById("newChapterBtn");
-  const chaptersBtn = document.getElementById("chaptersBtn");
-  const backupBtn = document.getElementById("backupBtn");
+  const homeScreen =
+    document.getElementById("homeScreen");
 
-  const backHomeBtns = document.querySelectorAll(".back-home-btn");
+  const editorScreen =
+    document.getElementById("editorScreen");
 
-  const chapterNumber = document.getElementById("chapterNumber");
-  const chapterTitle = document.getElementById("chapterTitle");
-  const chapterText = document.getElementById("chapterText");
+  const chaptersScreen =
+    document.getElementById("chaptersScreen");
 
-  const saveChapterBtn = document.getElementById("saveChapterBtn");
-  const deleteChapterBtn = document.getElementById("deleteChapterBtn");
-  const editorHeading = document.getElementById("editorHeading");
-  const saveMessage = document.getElementById("saveMessage");
+  const readerScreen =
+    document.getElementById("readerScreen");
+
+  const backupScreen =
+    document.getElementById("backupScreen");
+
+
+  /* =======================================================
+     CONNEXION
+  ======================================================= */
+
+  const accessCode =
+    document.getElementById("accessCode");
+
+  const unlockBtn =
+    document.getElementById("unlockBtn");
+
+  const codeError =
+    document.getElementById("codeError");
+
+  const libraryLockBtn =
+    document.getElementById("libraryLockBtn");
+
+  const lockBtn =
+    document.getElementById("lockBtn");
+
+
+  /* =======================================================
+     BIBLIOTHÈQUE
+  ======================================================= */
+
+  const newBookBtn =
+    document.getElementById("newBookBtn");
+
+  const booksList =
+    document.getElementById("booksList");
+
+  const backLibraryBtn =
+    document.getElementById("backLibraryBtn");
+
+  const bookEditorHeading =
+    document.getElementById("bookEditorHeading");
+
+  const bookTitle =
+    document.getElementById("bookTitle");
+
+  const saveBookBtn =
+    document.getElementById("saveBookBtn");
+
+  const deleteBookBtn =
+    document.getElementById("deleteBookBtn");
+
+  const bookSaveMessage =
+    document.getElementById("bookSaveMessage");
+
+  const backToLibraryBtn =
+    document.getElementById("backToLibraryBtn");
+
+  const renameBookBtn =
+    document.getElementById("renameBookBtn");
+
+  const currentBookTitle =
+    document.getElementById("currentBookTitle");
+
+
+  /* =======================================================
+     MENU LIVRE
+  ======================================================= */
+
+  const newChapterBtn =
+    document.getElementById("newChapterBtn");
+
+  const chaptersBtn =
+    document.getElementById("chaptersBtn");
+
+  const backupBtn =
+    document.getElementById("backupBtn");
+
+  const backHomeBtns =
+    document.querySelectorAll(".back-home-btn");
+
+
+  /* =======================================================
+     ÉDITEUR CHAPITRE
+  ======================================================= */
+
+  const editorHeading =
+    document.getElementById("editorHeading");
+
+  const chapterNumber =
+    document.getElementById("chapterNumber");
+
+  const chapterTitle =
+    document.getElementById("chapterTitle");
+
+  const chapterText =
+    document.getElementById("chapterText");
+
+  const saveChapterBtn =
+    document.getElementById("saveChapterBtn");
+
+  const deleteChapterBtn =
+    document.getElementById("deleteChapterBtn");
+
+  const saveMessage =
+    document.getElementById("saveMessage");
+
+
+  /* =======================================================
+     LISTE CHAPITRES
+  ======================================================= */
 
   const searchChapterNumber =
     document.getElementById("searchChapterNumber");
@@ -60,6 +170,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const chaptersList =
     document.getElementById("chaptersList");
+
+
+  /* =======================================================
+     LECTURE / MODIFICATION
+  ======================================================= */
 
   const readerHomeBtn =
     document.getElementById("readerHomeBtn");
@@ -88,6 +203,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const readerSaveMessage =
     document.getElementById("readerSaveMessage");
 
+
+  /* =======================================================
+     SAUVEGARDES
+  ======================================================= */
+
   const exportBtn =
     document.getElementById("exportBtn");
 
@@ -106,6 +226,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const cancelImportBtn =
     document.getElementById("cancelImportBtn");
 
+
+  /* =======================================================
+     SUPPRESSION CHAPITRE
+  ======================================================= */
+
   const deleteModal =
     document.getElementById("deleteModal");
 
@@ -117,7 +242,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     GESTION DES ÉCRANS
+     SUPPRESSION LIVRE
+  ======================================================= */
+
+  const deleteBookModal =
+    document.getElementById("deleteBookModal");
+
+  const confirmDeleteBookBtn =
+    document.getElementById("confirmDeleteBookBtn");
+
+  const cancelDeleteBookBtn =
+    document.getElementById("cancelDeleteBookBtn");
+
+
+  /* =======================================================
+     ÉCRANS
   ======================================================= */
 
   function showScreen(screen) {
@@ -136,13 +275,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     STOCKAGE
+     IDENTIFIANTS UNIQUES
   ======================================================= */
 
-  function getChapitres() {
+  function creerId(prefixe = "id") {
+
+    return (
+      prefixe +
+      "-" +
+      Date.now() +
+      "-" +
+      Math.random()
+        .toString(36)
+        .slice(2, 9)
+    );
+  }
+
+
+  /* =======================================================
+     STOCKAGE BIBLIOTHÈQUE
+  ======================================================= */
+
+  function getBibliotheque() {
 
     const data =
-      localStorage.getItem(STORAGE_KEY);
+      localStorage.getItem(STORAGE_LIBRARY);
 
     if (!data) {
       return [];
@@ -162,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
 
       console.error(
-        "Erreur lecture stockage :",
+        "Erreur lecture bibliothèque :",
         error
       );
 
@@ -171,43 +328,136 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  function saveChapitres(chapitres) {
+  function saveBibliotheque(livres) {
 
     localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(chapitres)
+      STORAGE_LIBRARY,
+      JSON.stringify(livres)
     );
   }
 
 
-  function trierChapitres(chapitres) {
+  /* =======================================================
+     MIGRATION DE L'ANCIENNE VERSION
+  ======================================================= */
 
-    return [...chapitres].sort((a, b) => {
+  function migrerAncienneVersion() {
 
-      const numA =
-        Number(a.numero) || 0;
+    const nouvelleBibliotheque =
+      getBibliotheque();
 
-      const numB =
-        Number(b.numero) || 0;
+    if (nouvelleBibliotheque.length > 0) {
+      return;
+    }
 
-      return numA - numB;
-    });
+    const ancienStockage =
+      localStorage.getItem(STORAGE_LEGACY);
+
+    if (!ancienStockage) {
+      return;
+    }
+
+    try {
+
+      const anciensChapitres =
+        JSON.parse(ancienStockage);
+
+      if (
+        !Array.isArray(anciensChapitres) ||
+        anciensChapitres.length === 0
+      ) {
+        return;
+      }
+
+      const livre = {
+
+        id: creerId("livre"),
+
+        titre: "Mon premier livre",
+
+        creeLe:
+          new Date().toISOString(),
+
+        modifieLe:
+          new Date().toISOString(),
+
+        chapitres:
+          anciensChapitres.map(chapitre => ({
+            ...chapitre,
+            id:
+              chapitre.id ||
+              creerId("chap")
+          }))
+      };
+
+      saveBibliotheque([livre]);
+
+    } catch (error) {
+
+      console.error(
+        "Migration impossible :",
+        error
+      );
+    }
   }
 
 
   /* =======================================================
-     IDENTIFIANTS
+     LIVRE ACTUEL
   ======================================================= */
 
-  function creerId() {
+  function getLivreActuel() {
 
-    return (
-      "chap-" +
-      Date.now() +
-      "-" +
-      Math.random()
-        .toString(36)
-        .slice(2, 9)
+    if (!livreEnCoursId) {
+      return null;
+    }
+
+    return getBibliotheque().find(
+      livre =>
+        livre.id === livreEnCoursId
+    ) || null;
+  }
+
+
+  function updateLivreDansBibliotheque(
+    livreModifie
+  ) {
+
+    const livres =
+      getBibliotheque();
+
+    const index =
+      livres.findIndex(
+        livre =>
+          livre.id === livreModifie.id
+      );
+
+    if (index === -1) {
+      return false;
+    }
+
+    livreModifie.modifieLe =
+      new Date().toISOString();
+
+    livres[index] =
+      livreModifie;
+
+    saveBibliotheque(livres);
+
+    return true;
+  }
+
+
+  /* =======================================================
+     TRI DES CHAPITRES
+  ======================================================= */
+
+  function trierChapitres(chapitres) {
+
+    return [...chapitres].sort(
+      (a, b) =>
+        Number(a.numero) -
+        Number(b.numero)
     );
   }
 
@@ -228,11 +478,13 @@ document.addEventListener("DOMContentLoaded", () => {
       accessCode.value = "";
 
       sessionStorage.setItem(
-        "monLivrePrive_deverrouille",
+        SESSION_UNLOCKED,
         "true"
       );
 
-      showScreen(homeScreen);
+      afficherBibliotheque();
+
+      showScreen(libraryScreen);
 
       return;
     }
@@ -268,10 +520,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function verrouiller() {
 
     sessionStorage.removeItem(
-      "monLivrePrive_deverrouille"
+      SESSION_UNLOCKED
     );
 
+    livreEnCoursId = null;
     chapitreEnCoursId = null;
+    livreEditeId = null;
 
     showScreen(lockScreen);
 
@@ -281,6 +535,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  libraryLockBtn.addEventListener(
+    "click",
+    verrouiller
+  );
+
+
   lockBtn.addEventListener(
     "click",
     verrouiller
@@ -288,22 +548,391 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     ACCUEIL
+     AFFICHER BIBLIOTHÈQUE
   ======================================================= */
 
-  backHomeBtns.forEach(button => {
+  function afficherBibliotheque() {
 
-    button.addEventListener(
-      "click",
-      () => {
+    booksList.innerHTML = "";
 
-        chapitreEnCoursId = null;
+    const livres =
+      getBibliotheque();
 
-        showScreen(homeScreen);
+    if (livres.length === 0) {
+
+      const empty =
+        document.createElement("div");
+
+      empty.className =
+        "empty-list";
+
+      empty.innerHTML =
+        "Aucun livre pour le moment.<br><br>Créez votre premier livre.";
+
+      booksList.appendChild(empty);
+
+      return;
+    }
+
+    livres.forEach(livre => {
+
+      const card =
+        document.createElement("button");
+
+      card.className =
+        "chapter-item book-item";
+
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "chapter-item-info";
+
+      const label =
+        document.createElement("div");
+
+      label.className =
+        "chapter-item-number";
+
+      const nombreChapitres =
+        Array.isArray(livre.chapitres)
+          ? livre.chapitres.length
+          : 0;
+
+      label.textContent =
+        nombreChapitres +
+        (nombreChapitres > 1
+          ? " chapitres"
+          : " chapitre");
+
+      const title =
+        document.createElement("div");
+
+      title.className =
+        "chapter-item-title";
+
+      title.textContent =
+        livre.titre;
+
+      const arrow =
+        document.createElement("div");
+
+      arrow.className =
+        "chapter-arrow";
+
+      arrow.textContent = "→";
+
+      info.appendChild(label);
+      info.appendChild(title);
+
+      card.appendChild(info);
+      card.appendChild(arrow);
+
+      card.addEventListener(
+        "click",
+        () => {
+
+          ouvrirLivre(livre.id);
+        }
+      );
+
+      booksList.appendChild(card);
+    });
+  }
+
+
+  /* =======================================================
+     NOUVEAU LIVRE
+  ======================================================= */
+
+  newBookBtn.addEventListener(
+    "click",
+    () => {
+
+      livreEditeId = null;
+
+      bookEditorHeading.textContent =
+        "Nouveau livre";
+
+      bookTitle.value = "";
+
+      bookSaveMessage.textContent = "";
+
+      deleteBookBtn.classList.add(
+        "hidden"
+      );
+
+      showScreen(bookEditorScreen);
+
+      setTimeout(() => {
+        bookTitle.focus();
+      }, 100);
+    }
+  );
+
+
+  /* =======================================================
+     ENREGISTRER LIVRE
+  ======================================================= */
+
+  saveBookBtn.addEventListener(
+    "click",
+    () => {
+
+      const titre =
+        bookTitle.value.trim();
+
+      if (!titre) {
+
+        bookSaveMessage.textContent =
+          "Indiquez un titre pour le livre.";
+
+        return;
       }
-    );
-  });
 
+      const livres =
+        getBibliotheque();
+
+      if (!livreEditeId) {
+
+        const nouveauLivre = {
+
+          id: creerId("livre"),
+
+          titre,
+
+          creeLe:
+            new Date().toISOString(),
+
+          modifieLe:
+            new Date().toISOString(),
+
+          chapitres: []
+        };
+
+        livres.push(
+          nouveauLivre
+        );
+
+        saveBibliotheque(livres);
+
+        livreEditeId =
+          nouveauLivre.id;
+
+        livreEnCoursId =
+          nouveauLivre.id;
+
+        bookEditorHeading.textContent =
+          "Renommer le livre";
+
+        deleteBookBtn.classList.remove(
+          "hidden"
+        );
+
+        bookSaveMessage.textContent =
+          "Livre créé.";
+
+        return;
+      }
+
+
+      const index =
+        livres.findIndex(
+          livre =>
+            livre.id === livreEditeId
+        );
+
+      if (index === -1) {
+        return;
+      }
+
+      livres[index].titre =
+        titre;
+
+      livres[index].modifieLe =
+        new Date().toISOString();
+
+      saveBibliotheque(livres);
+
+      if (
+        livreEnCoursId ===
+        livreEditeId
+      ) {
+
+        currentBookTitle.textContent =
+          titre;
+      }
+
+      bookSaveMessage.textContent =
+        "Titre enregistré.";
+    }
+  );
+
+
+  /* =======================================================
+     RETOUR BIBLIOTHÈQUE
+  ======================================================= */
+
+  backLibraryBtn.addEventListener(
+    "click",
+    () => {
+
+      livreEditeId = null;
+
+      afficherBibliotheque();
+
+      showScreen(libraryScreen);
+    }
+  );
+
+
+  backToLibraryBtn.addEventListener(
+    "click",
+    () => {
+
+      livreEnCoursId = null;
+      chapitreEnCoursId = null;
+
+      afficherBibliotheque();
+
+      showScreen(libraryScreen);
+    }
+  );
+
+
+  /* =======================================================
+     OUVRIR UN LIVRE
+  ======================================================= */
+
+  function ouvrirLivre(id) {
+
+    const livre =
+      getBibliotheque().find(
+        item => item.id === id
+      );
+
+    if (!livre) {
+      return;
+    }
+
+    livreEnCoursId = id;
+    chapitreEnCoursId = null;
+
+    currentBookTitle.textContent =
+      livre.titre;
+
+    showScreen(homeScreen);
+  }
+
+
+  /* =======================================================
+     RENOMMER LIVRE
+  ======================================================= */
+
+  renameBookBtn.addEventListener(
+    "click",
+    () => {
+
+      const livre =
+        getLivreActuel();
+
+      if (!livre) {
+        return;
+      }
+
+      livreEditeId =
+        livre.id;
+
+      bookEditorHeading.textContent =
+        "Renommer le livre";
+
+      bookTitle.value =
+        livre.titre;
+
+      bookSaveMessage.textContent = "";
+
+      deleteBookBtn.classList.remove(
+        "hidden"
+      );
+
+      showScreen(bookEditorScreen);
+    }
+  );
+
+
+  /* =======================================================
+     SUPPRIMER LIVRE
+  ======================================================= */
+
+  deleteBookBtn.addEventListener(
+    "click",
+    () => {
+
+      if (!livreEditeId) {
+        return;
+      }
+
+      deleteBookModal.classList.remove(
+        "hidden"
+      );
+    }
+  );
+
+
+  cancelDeleteBookBtn.addEventListener(
+    "click",
+    () => {
+
+      deleteBookModal.classList.add(
+        "hidden"
+      );
+    }
+  );
+
+
+  confirmDeleteBookBtn.addEventListener(
+    "click",
+    () => {
+
+      if (!livreEditeId) {
+        return;
+      }
+
+      let livres =
+        getBibliotheque();
+
+      livres =
+        livres.filter(
+          livre =>
+            livre.id !== livreEditeId
+        );
+
+      saveBibliotheque(livres);
+
+      if (
+        livreEnCoursId ===
+        livreEditeId
+      ) {
+        livreEnCoursId = null;
+      }
+
+      livreEditeId = null;
+      chapitreEnCoursId = null;
+
+      deleteBookModal.classList.add(
+        "hidden"
+      );
+
+      afficherBibliotheque();
+
+      showScreen(libraryScreen);
+    }
+  );
+
+
+  /* =======================================================
+     MENU DU LIVRE
+  ======================================================= */
 
   newChapterBtn.addEventListener(
     "click",
@@ -332,10 +961,54 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
+     RETOUR ACCUEIL LIVRE
+  ======================================================= */
+
+  backHomeBtns.forEach(button => {
+
+    if (
+      button.id === "backLibraryBtn" ||
+      button.id === "readerHomeBtn"
+    ) {
+      return;
+    }
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        chapitreEnCoursId = null;
+
+        const livre =
+          getLivreActuel();
+
+        if (!livre) {
+
+          afficherBibliotheque();
+
+          showScreen(libraryScreen);
+
+          return;
+        }
+
+        currentBookTitle.textContent =
+          livre.titre;
+
+        showScreen(homeScreen);
+      }
+    );
+  });
+
+
+  /* =======================================================
      NOUVEAU CHAPITRE
   ======================================================= */
 
   function ouvrirNouveauChapitre() {
+
+    if (!getLivreActuel()) {
+      return;
+    }
 
     chapitreEnCoursId = null;
 
@@ -343,9 +1016,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "Nouveau chapitre";
 
     chapterNumber.value = "";
-
     chapterTitle.value = "";
-
     chapterText.value = "";
 
     saveMessage.textContent = "";
@@ -363,12 +1034,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     ENREGISTRER NOUVEAU CHAPITRE
+     ENREGISTRER CHAPITRE
   ======================================================= */
 
   saveChapterBtn.addEventListener(
     "click",
     () => {
+
+      const livre =
+        getLivreActuel();
+
+      if (!livre) {
+        return;
+      }
+
+      if (!Array.isArray(livre.chapitres)) {
+        livre.chapitres = [];
+      }
 
       const numero =
         Number(chapterNumber.value);
@@ -395,19 +1077,19 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      let chapitres =
-        getChapitres();
+
+      /* NOUVEAU CHAPITRE */
 
       if (!chapitreEnCoursId) {
 
-        const existeDeja =
-          chapitres.some(
+        const existe =
+          livre.chapitres.some(
             chapitre =>
               Number(chapitre.numero)
               === numero
           );
 
-        if (existeDeja) {
+        if (existe) {
 
           saveMessage.textContent =
             "Un chapitre avec ce numéro existe déjà.";
@@ -417,7 +1099,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const nouveauChapitre = {
 
-          id: creerId(),
+          id: creerId("chap"),
 
           numero,
 
@@ -432,36 +1114,38 @@ document.addEventListener("DOMContentLoaded", () => {
             new Date().toISOString()
         };
 
-        chapitres.push(
+        livre.chapitres.push(
           nouveauChapitre
         );
 
-        saveChapitres(
-          chapitres
+        updateLivreDansBibliotheque(
+          livre
         );
 
         chapitreEnCoursId =
           nouveauChapitre.id;
 
-        saveMessage.textContent =
-          "Chapitre enregistré.";
-
-        deleteChapterBtn
-          .classList
-          .remove("hidden");
-
         editorHeading.textContent =
           "Modifier le chapitre";
+
+        deleteChapterBtn.classList.remove(
+          "hidden"
+        );
+
+        saveMessage.textContent =
+          "Chapitre enregistré.";
 
         return;
       }
 
 
+      /* MODIFIER CHAPITRE */
+
       const index =
-        chapitres.findIndex(
+        livre.chapitres.findIndex(
           chapitre =>
-            chapitre.id
-            === chapitreEnCoursId
+            chapitre.id ===
+            chapitreEnCoursId
         );
 
       if (index === -1) {
@@ -469,13 +1153,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const numeroUtilise =
-        chapitres.some(
+        livre.chapitres.some(
           chapitre =>
-            chapitre.id
-            !== chapitreEnCoursId
-            &&
+            chapitre.id !==
+              chapitreEnCoursId &&
             Number(chapitre.numero)
-            === numero
+              === numero
         );
 
       if (numeroUtilise) {
@@ -486,20 +1169,20 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      chapitres[index].numero =
+      livre.chapitres[index].numero =
         numero;
 
-      chapitres[index].titre =
+      livre.chapitres[index].titre =
         titre;
 
-      chapitres[index].texte =
+      livre.chapitres[index].texte =
         texte;
 
-      chapitres[index].modifieLe =
+      livre.chapitres[index].modifieLe =
         new Date().toISOString();
 
-      saveChapitres(
-        chapitres
+      updateLivreDansBibliotheque(
+        livre
       );
 
       saveMessage.textContent =
@@ -509,16 +1192,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     LISTE DES CHAPITRES
+     LISTE CHAPITRES
   ======================================================= */
 
   function afficherListeChapitres() {
 
     chaptersList.innerHTML = "";
 
+    const livre =
+      getLivreActuel();
+
+    if (!livre) {
+      return;
+    }
+
     const chapitres =
       trierChapitres(
-        getChapitres()
+        Array.isArray(livre.chapitres)
+          ? livre.chapitres
+          : []
       );
 
     if (chapitres.length === 0) {
@@ -589,8 +1281,7 @@ document.addEventListener("DOMContentLoaded", () => {
         arrow.className =
           "chapter-arrow";
 
-        arrow.textContent =
-          "→";
+        arrow.textContent = "→";
 
         info.appendChild(number);
         info.appendChild(title);
@@ -617,7 +1308,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     RECHERCHE PAR NUMÉRO
+     RECHERCHER CHAPITRE
   ======================================================= */
 
   searchChapterBtn.addEventListener(
@@ -639,6 +1330,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function rechercherChapitre() {
 
+    const livre =
+      getLivreActuel();
+
+    if (!livre) {
+      return;
+    }
+
     const numero =
       Number(
         searchChapterNumber.value
@@ -649,7 +1347,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const chapitre =
-      getChapitres().find(
+      livre.chapitres.find(
         item =>
           Number(item.numero)
           === numero
@@ -658,7 +1356,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!chapitre) {
 
       alert(
-        "Ce chapitre n'existe pas."
+        "Ce chapitre n'existe pas dans ce livre."
       );
 
       return;
@@ -671,13 +1369,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     OUVRIR UN CHAPITRE
+     OUVRIR CHAPITRE
   ======================================================= */
 
   function ouvrirChapitre(id) {
 
+    const livre =
+      getLivreActuel();
+
+    if (!livre) {
+      return;
+    }
+
     const chapitre =
-      getChapitres().find(
+      livre.chapitres.find(
         item => item.id === id
       );
 
@@ -695,7 +1400,7 @@ document.addEventListener("DOMContentLoaded", () => {
       chapitre.titre;
 
     readerChapterText.value =
-      chapitre.texte;
+      chapitre.texte || "";
 
     readerSaveMessage.textContent =
       "";
@@ -707,25 +1412,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     ENREGISTRER DEPUIS LA LECTURE
+     ENREGISTRER DEPUIS LECTURE
   ======================================================= */
 
   saveReaderBtn.addEventListener(
     "click",
     () => {
 
-      if (!chapitreEnCoursId) {
+      const livre =
+        getLivreActuel();
+
+      if (
+        !livre ||
+        !chapitreEnCoursId
+      ) {
         return;
       }
 
-      let chapitres =
-        getChapitres();
-
       const index =
-        chapitres.findIndex(
+        livre.chapitres.findIndex(
           chapitre =>
-            chapitre.id
-            === chapitreEnCoursId
+            chapitre.id ===
+            chapitreEnCoursId
         );
 
       if (index === -1) {
@@ -733,9 +1441,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const nouveauTitre =
-        readerChapterTitle
-          .value
-          .trim();
+        readerChapterTitle.value.trim();
 
       if (!nouveauTitre) {
 
@@ -745,17 +1451,17 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      chapitres[index].titre =
+      livre.chapitres[index].titre =
         nouveauTitre;
 
-      chapitres[index].texte =
+      livre.chapitres[index].texte =
         readerChapterText.value;
 
-      chapitres[index].modifieLe =
+      livre.chapitres[index].modifieLe =
         new Date().toISOString();
 
-      saveChapitres(
-        chapitres
+      updateLivreDansBibliotheque(
+        livre
       );
 
       readerSaveMessage.textContent =
@@ -777,24 +1483,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function mettreAJourNavigation() {
 
+    const livre =
+      getLivreActuel();
+
+    if (!livre) {
+      return;
+    }
+
     const chapitres =
       trierChapitres(
-        getChapitres()
+        livre.chapitres
       );
 
     const index =
       chapitres.findIndex(
         chapitre =>
-          chapitre.id
-          === chapitreEnCoursId
+          chapitre.id ===
+          chapitreEnCoursId
       );
 
     previousChapterBtn.disabled =
       index <= 0;
 
     nextChapterBtn.disabled =
-      index === -1
-      ||
+      index === -1 ||
       index >=
         chapitres.length - 1;
   }
@@ -804,16 +1516,23 @@ document.addEventListener("DOMContentLoaded", () => {
     "click",
     () => {
 
+      const livre =
+        getLivreActuel();
+
+      if (!livre) {
+        return;
+      }
+
       const chapitres =
         trierChapitres(
-          getChapitres()
+          livre.chapitres
         );
 
       const index =
         chapitres.findIndex(
           chapitre =>
-            chapitre.id
-            === chapitreEnCoursId
+            chapitre.id ===
+            chapitreEnCoursId
         );
 
       if (index > 0) {
@@ -830,21 +1549,27 @@ document.addEventListener("DOMContentLoaded", () => {
     "click",
     () => {
 
+      const livre =
+        getLivreActuel();
+
+      if (!livre) {
+        return;
+      }
+
       const chapitres =
         trierChapitres(
-          getChapitres()
+          livre.chapitres
         );
 
       const index =
         chapitres.findIndex(
           chapitre =>
-            chapitre.id
-            === chapitreEnCoursId
+            chapitre.id ===
+            chapitreEnCoursId
         );
 
       if (
-        index !== -1
-        &&
+        index !== -1 &&
         index <
           chapitres.length - 1
       ) {
@@ -858,21 +1583,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     RETOUR LISTE
+     RETOUR DEPUIS LECTURE
   ======================================================= */
-
-  readerListBtn.addEventListener(
-    "click",
-    () => {
-
-      afficherListeChapitres();
-
-      showScreen(
-        chaptersScreen
-      );
-    }
-  );
-
 
   readerHomeBtn.addEventListener(
     "click",
@@ -880,13 +1592,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
       chapitreEnCoursId = null;
 
+      const livre =
+        getLivreActuel();
+
+      if (!livre) {
+
+        afficherBibliotheque();
+
+        showScreen(libraryScreen);
+
+        return;
+      }
+
+      currentBookTitle.textContent =
+        livre.titre;
+
       showScreen(homeScreen);
     }
   );
 
 
+  readerListBtn.addEventListener(
+    "click",
+    () => {
+
+      afficherListeChapitres();
+
+      showScreen(chaptersScreen);
+    }
+  );
+
+
   /* =======================================================
-     SUPPRESSION
+     SUPPRIMER CHAPITRE
   ======================================================= */
 
   deleteChapterBtn.addEventListener(
@@ -919,22 +1657,25 @@ document.addEventListener("DOMContentLoaded", () => {
     "click",
     () => {
 
-      if (!chapitreEnCoursId) {
+      const livre =
+        getLivreActuel();
+
+      if (
+        !livre ||
+        !chapitreEnCoursId
+      ) {
         return;
       }
 
-      let chapitres =
-        getChapitres();
-
-      chapitres =
-        chapitres.filter(
+      livre.chapitres =
+        livre.chapitres.filter(
           chapitre =>
-            chapitre.id
-            !== chapitreEnCoursId
+            chapitre.id !==
+            chapitreEnCoursId
         );
 
-      saveChapitres(
-        chapitres
+      updateLivreDansBibliotheque(
+        livre
       );
 
       chapitreEnCoursId = null;
@@ -945,35 +1686,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
       afficherListeChapitres();
 
-      showScreen(
-        chaptersScreen
-      );
+      showScreen(chaptersScreen);
     }
   );
 
 
   /* =======================================================
-     EXPORTER UNE SAUVEGARDE
+     EXPORTER TOUTE LA BIBLIOTHÈQUE
   ======================================================= */
 
   exportBtn.addEventListener(
     "click",
     () => {
 
-      const chapitres =
-        getChapitres();
+      const livres =
+        getBibliotheque();
 
       const sauvegarde = {
 
         application:
-          "Mon Livre Privé",
+          "Ma Bibliothèque Privée",
 
-        version: 1,
+        version: 2,
 
         exporteLe:
           new Date().toISOString(),
 
-        chapitres
+        livres
       };
 
       const contenu =
@@ -998,22 +1737,17 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
       const lien =
-        document.createElement(
-          "a"
-        );
-
-      const maintenant =
-        new Date();
+        document.createElement("a");
 
       const date =
-        maintenant
+        new Date()
           .toISOString()
           .slice(0, 10);
 
       lien.href = url;
 
       lien.download =
-        "mon-livre-sauvegarde-" +
+        "bibliotheque-sauvegarde-" +
         date +
         ".json";
 
@@ -1033,7 +1767,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     IMPORTER UNE SAUVEGARDE
+     IMPORTER SAUVEGARDE
   ======================================================= */
 
   importFile.addEventListener(
@@ -1059,38 +1793,101 @@ document.addEventListener("DOMContentLoaded", () => {
               e.target.result
             );
 
-          let chapitresImportes;
+          /* Nouvelle sauvegarde multi-livres */
 
           if (
-            Array.isArray(data)
+            data &&
+            Array.isArray(data.livres)
           ) {
 
-            chapitresImportes =
-              data;
+            fichierImporte =
+              normaliserLivres(
+                data.livres
+              );
 
-          } else if (
-            data
-            &&
-            Array.isArray(
-              data.chapitres
-            )
-          ) {
-
-            chapitresImportes =
-              data.chapitres;
-
-          } else {
-
-            throw new Error(
-              "Format invalide"
+            importModal.classList.remove(
+              "hidden"
             );
+
+            return;
           }
 
-          fichierImporte =
-            chapitresImportes;
 
-          importModal.classList.remove(
-            "hidden"
+          /* Ancienne sauvegarde mono-livre */
+
+          if (
+            data &&
+            Array.isArray(data.chapitres)
+          ) {
+
+            fichierImporte = [
+
+              {
+                id:
+                  creerId("livre"),
+
+                titre:
+                  "Livre importé",
+
+                creeLe:
+                  new Date().toISOString(),
+
+                modifieLe:
+                  new Date().toISOString(),
+
+                chapitres:
+                  normaliserChapitres(
+                    data.chapitres
+                  )
+              }
+
+            ];
+
+            importModal.classList.remove(
+              "hidden"
+            );
+
+            return;
+          }
+
+
+          /* Très ancienne sauvegarde tableau direct */
+
+          if (Array.isArray(data)) {
+
+            fichierImporte = [
+
+              {
+                id:
+                  creerId("livre"),
+
+                titre:
+                  "Livre importé",
+
+                creeLe:
+                  new Date().toISOString(),
+
+                modifieLe:
+                  new Date().toISOString(),
+
+                chapitres:
+                  normaliserChapitres(
+                    data
+                  )
+              }
+
+            ];
+
+            importModal.classList.remove(
+              "hidden"
+            );
+
+            return;
+          }
+
+
+          throw new Error(
+            "Format invalide"
           );
 
         } catch (error) {
@@ -1105,15 +1902,88 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       };
 
-      reader.readAsText(
-        file
-      );
+      reader.readAsText(file);
     }
   );
 
 
   /* =======================================================
-     FUSIONNER
+     NORMALISATION IMPORT
+  ======================================================= */
+
+  function normaliserChapitres(
+    chapitres
+  ) {
+
+    if (!Array.isArray(chapitres)) {
+      return [];
+    }
+
+    return chapitres.map(
+      chapitre => ({
+
+        id:
+          chapitre.id ||
+          creerId("chap"),
+
+        numero:
+          Number(chapitre.numero) ||
+          1,
+
+        titre:
+          chapitre.titre ||
+          "Sans titre",
+
+        texte:
+          chapitre.texte ||
+          "",
+
+        creeLe:
+          chapitre.creeLe ||
+          new Date().toISOString(),
+
+        modifieLe:
+          chapitre.modifieLe ||
+          new Date().toISOString()
+      })
+    );
+  }
+
+
+  function normaliserLivres(
+    livres
+  ) {
+
+    return livres.map(
+      livre => ({
+
+        id:
+          livre.id ||
+          creerId("livre"),
+
+        titre:
+          livre.titre ||
+          "Livre sans titre",
+
+        creeLe:
+          livre.creeLe ||
+          new Date().toISOString(),
+
+        modifieLe:
+          livre.modifieLe ||
+          new Date().toISOString(),
+
+        chapitres:
+          normaliserChapitres(
+            livre.chapitres
+          )
+      })
+    );
+  }
+
+
+  /* =======================================================
+     FUSIONNER SAUVEGARDE
   ======================================================= */
 
   mergeImportBtn.addEventListener(
@@ -1129,64 +1999,150 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const actuels =
-        getChapitres();
+        getBibliotheque();
 
-      const map =
-        new Map();
-
-      actuels.forEach(
-        chapitre => {
-
-          map.set(
-            chapitre.id,
-            chapitre
-          );
-        }
-      );
+      const resultat =
+        [...actuels];
 
       fichierImporte.forEach(
-        chapitre => {
+        livreImporte => {
 
-          if (!chapitre.id) {
+          const indexLivre =
+            resultat.findIndex(
+              livre =>
+                livre.id ===
+                livreImporte.id
+            );
 
-            chapitre.id =
-              creerId();
+          /* Livre totalement nouveau */
+
+          if (indexLivre === -1) {
+
+            resultat.push(
+              livreImporte
+            );
+
+            return;
           }
+
+
+          /* Livre déjà existant :
+             fusionner ses chapitres */
+
+          const livreActuel =
+            resultat[indexLivre];
 
           if (
-            !map.has(
-              chapitre.id
+            !Array.isArray(
+              livreActuel.chapitres
             )
           ) {
-
-            map.set(
-              chapitre.id,
-              chapitre
-            );
+            livreActuel.chapitres = [];
           }
+
+          livreImporte.chapitres.forEach(
+            chapitreImporte => {
+
+              const indexChapitre =
+                livreActuel
+                  .chapitres
+                  .findIndex(
+                    chapitre =>
+                      chapitre.id ===
+                      chapitreImporte.id
+                  );
+
+              if (
+                indexChapitre === -1
+              ) {
+
+                livreActuel
+                  .chapitres
+                  .push(
+                    chapitreImporte
+                  );
+
+              } else {
+
+                /*
+                  Même identifiant :
+                  on conserve la version
+                  la plus récemment modifiée.
+                */
+
+                const dateActuelle =
+                  new Date(
+                    livreActuel
+                      .chapitres[
+                        indexChapitre
+                      ]
+                      .modifieLe || 0
+                  ).getTime();
+
+                const dateImportee =
+                  new Date(
+                    chapitreImporte
+                      .modifieLe || 0
+                  ).getTime();
+
+                if (
+                  dateImportee >
+                  dateActuelle
+                ) {
+
+                  livreActuel.chapitres[
+                    indexChapitre
+                  ] =
+                    chapitreImporte;
+                }
+              }
+            }
+          );
+
+          const dateLivreActuel =
+            new Date(
+              livreActuel.modifieLe || 0
+            ).getTime();
+
+          const dateLivreImporte =
+            new Date(
+              livreImporte.modifieLe || 0
+            ).getTime();
+
+          if (
+            dateLivreImporte >
+            dateLivreActuel
+          ) {
+
+            livreActuel.titre =
+              livreImporte.titre;
+
+            livreActuel.modifieLe =
+              livreImporte.modifieLe;
+          }
+
+          resultat[indexLivre] =
+            livreActuel;
         }
       );
 
-      const fusion =
-        Array.from(
-          map.values()
-        );
-
-      saveChapitres(
-        fusion
+      saveBibliotheque(
+        resultat
       );
 
       fermerImport();
 
+      afficherBibliotheque();
+
       alert(
-        "La sauvegarde a été fusionnée avec votre livre."
+        "La sauvegarde a été fusionnée avec votre bibliothèque."
       );
     }
   );
 
 
   /* =======================================================
-     REMPLACER
+     REMPLACER BIBLIOTHÈQUE
   ======================================================= */
 
   replaceImportBtn.addEventListener(
@@ -1203,40 +2159,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const confirmation =
         confirm(
-          "Le livre actuel sera remplacé. Continuer ?"
+          "La bibliothèque actuelle sera remplacée. Continuer ?"
         );
 
       if (!confirmation) {
         return;
       }
 
-      const nouvelleListe =
-        fichierImporte.map(
-          chapitre => {
-
-            return {
-              ...chapitre,
-
-              id:
-                chapitre.id
-                ||
-                creerId()
-            };
-          }
-        );
-
-      saveChapitres(
-        nouvelleListe
+      saveBibliotheque(
+        normaliserLivres(
+          fichierImporte
+        )
       );
+
+      livreEnCoursId = null;
+      chapitreEnCoursId = null;
+      livreEditeId = null;
 
       fermerImport();
 
+      afficherBibliotheque();
+
+      showScreen(libraryScreen);
+
       alert(
-        "Votre livre a été remplacé par la sauvegarde."
+        "Votre bibliothèque a été remplacée par la sauvegarde."
       );
     }
   );
 
+
+  /* =======================================================
+     FERMER IMPORT
+  ======================================================= */
 
   cancelImportBtn.addEventListener(
     "click",
@@ -1265,8 +2220,8 @@ document.addEventListener("DOMContentLoaded", () => {
     event => {
 
       if (
-        event.target
-        === importModal
+        event.target ===
+        importModal
       ) {
 
         fermerImport();
@@ -1280,11 +2235,28 @@ document.addEventListener("DOMContentLoaded", () => {
     event => {
 
       if (
-        event.target
-        === deleteModal
+        event.target ===
+        deleteModal
       ) {
 
         deleteModal.classList.add(
+          "hidden"
+        );
+      }
+    }
+  );
+
+
+  deleteBookModal.addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target ===
+        deleteBookModal
+      ) {
+
+        deleteBookModal.classList.add(
           "hidden"
         );
       }
@@ -1296,17 +2268,20 @@ document.addEventListener("DOMContentLoaded", () => {
      LANCEMENT
   ======================================================= */
 
+  migrerAncienneVersion();
+
   const deverrouille =
     sessionStorage.getItem(
-      "monLivrePrive_deverrouille"
+      SESSION_UNLOCKED
     );
 
   if (
-    deverrouille
-    === "true"
+    deverrouille === "true"
   ) {
 
-    showScreen(homeScreen);
+    afficherBibliotheque();
+
+    showScreen(libraryScreen);
 
   } else {
 
