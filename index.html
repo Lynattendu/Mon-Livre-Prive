@@ -9,7 +9,7 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Mon Livre Privé</title>
+  <title>Ma Bibliothèque Privée</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -26,10 +26,10 @@
 
       <div class="lock-icon">🔒</div>
 
-      <h1>Mon Livre Privé</h1>
+      <h1>Ma Bibliothèque Privée</h1>
 
       <p class="subtitle">
-        Entrez votre code pour ouvrir le livre
+        Entrez votre code pour accéder à vos livres
       </p>
 
       <input
@@ -40,7 +40,7 @@
       >
 
       <button id="unlockBtn" class="primary-btn">
-        Ouvrir le livre
+        Ouvrir
       </button>
 
       <p id="codeError" class="error-message"></p>
@@ -51,7 +51,105 @@
 
 
   <!-- =====================================================
-       ACCUEIL
+       BIBLIOTHÈQUE
+  ====================================================== -->
+
+  <section id="libraryScreen" class="screen">
+
+    <div class="app-container">
+
+      <header class="main-header">
+
+        <div>
+          <p class="small-title">ESPACE PRIVÉ</p>
+          <h1>Mes livres</h1>
+        </div>
+
+        <button id="libraryLockBtn" class="icon-btn">
+          🔒
+        </button>
+
+      </header>
+
+
+      <div class="library-actions">
+
+        <button id="newBookBtn" class="primary-btn">
+          ➕ Nouveau livre
+        </button>
+
+      </div>
+
+
+      <div id="booksList" class="books-list">
+
+        <!-- Les livres seront ajoutés ici par JavaScript -->
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       CRÉER / RENOMMER UN LIVRE
+  ====================================================== -->
+
+  <section id="bookEditorScreen" class="screen">
+
+    <div class="app-container">
+
+      <header class="page-header">
+
+        <button id="backLibraryBtn" class="back-home-btn">
+          ← Mes livres
+        </button>
+
+        <h2 id="bookEditorHeading">
+          Nouveau livre
+        </h2>
+
+      </header>
+
+
+      <div class="editor-form">
+
+        <label for="bookTitle">
+          Titre du livre
+        </label>
+
+        <input
+          type="text"
+          id="bookTitle"
+          placeholder="Titre du livre"
+        >
+
+
+        <div class="editor-actions">
+
+          <button id="saveBookBtn" class="primary-btn">
+            💾 Enregistrer
+          </button>
+
+          <button id="deleteBookBtn" class="danger-btn hidden">
+            🗑️ Supprimer le livre
+          </button>
+
+        </div>
+
+
+        <p id="bookSaveMessage" class="save-message"></p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       ACCUEIL D'UN LIVRE
   ====================================================== -->
 
   <section id="homeScreen" class="screen">
@@ -61,8 +159,8 @@
       <header class="main-header">
 
         <div>
-          <p class="small-title">MON ESPACE D'ÉCRITURE</p>
-          <h1>Mon Livre</h1>
+          <p class="small-title">LIVRE EN COURS</p>
+          <h1 id="currentBookTitle">Mon Livre</h1>
         </div>
 
         <button id="lockBtn" class="icon-btn">
@@ -70,6 +168,19 @@
         </button>
 
       </header>
+
+
+      <div class="current-book-actions">
+
+        <button id="backToLibraryBtn" class="secondary-btn">
+          ← Mes livres
+        </button>
+
+        <button id="renameBookBtn" class="secondary-btn">
+          ✏️ Renommer le livre
+        </button>
+
+      </div>
 
 
       <div class="home-menu">
@@ -127,7 +238,7 @@
       <header class="page-header">
 
         <button class="back-home-btn">
-          ← Accueil
+          ← Accueil du livre
         </button>
 
         <h2 id="editorHeading">
@@ -205,7 +316,7 @@
       <header class="page-header">
 
         <button class="back-home-btn">
-          ← Accueil
+          ← Accueil du livre
         </button>
 
         <h2>Mes chapitres</h2>
@@ -251,7 +362,7 @@
       <header class="reader-header">
 
         <button id="readerHomeBtn" class="back-home-btn">
-          ← Accueil
+          ← Accueil du livre
         </button>
 
         <button id="readerListBtn" class="secondary-btn small-btn">
@@ -320,7 +431,7 @@
       <header class="page-header">
 
         <button class="back-home-btn">
-          ← Accueil
+          ← Accueil du livre
         </button>
 
         <h2>Sauvegardes</h2>
@@ -330,10 +441,10 @@
 
       <div class="backup-card">
 
-        <h3>💾 Exporter le livre</h3>
+        <h3>💾 Exporter toute la bibliothèque</h3>
 
         <p>
-          Crée un fichier contenant tous vos chapitres.
+          Crée un fichier contenant tous vos livres et tous vos chapitres.
         </p>
 
         <button id="exportBtn" class="primary-btn">
@@ -348,7 +459,7 @@
         <h3>📂 Importer une sauvegarde</h3>
 
         <p>
-          Sélectionnez une ancienne sauvegarde de votre livre.
+          Sélectionnez une ancienne sauvegarde de votre bibliothèque.
         </p>
 
         <input
@@ -379,11 +490,11 @@
       </p>
 
       <button id="mergeImportBtn" class="primary-btn">
-        Fusionner avec mon livre
+        Fusionner avec ma bibliothèque
       </button>
 
       <button id="replaceImportBtn" class="secondary-btn">
-        Remplacer mon livre
+        Remplacer ma bibliothèque
       </button>
 
       <button id="cancelImportBtn" class="text-btn">
@@ -396,7 +507,7 @@
 
 
   <!-- =====================================================
-       CONFIRMATION SUPPRESSION
+       CONFIRMATION SUPPRESSION CHAPITRE
   ====================================================== -->
 
   <div id="deleteModal" class="modal hidden">
@@ -414,6 +525,33 @@
       </button>
 
       <button id="cancelDeleteBtn" class="secondary-btn">
+        Annuler
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       CONFIRMATION SUPPRESSION LIVRE
+  ====================================================== -->
+
+  <div id="deleteBookModal" class="modal hidden">
+
+    <div class="modal-content">
+
+      <h3>Supprimer ce livre ?</h3>
+
+      <p>
+        Tous les chapitres de ce livre seront également supprimés.
+      </p>
+
+      <button id="confirmDeleteBookBtn" class="danger-btn">
+        Oui, supprimer le livre
+      </button>
+
+      <button id="cancelDeleteBookBtn" class="secondary-btn">
         Annuler
       </button>
 
