@@ -778,3 +778,110 @@ button:active {
     font-size: 1.7rem;
   }
 }
+/* =========================================================
+   BIBLIOTHÈQUE — MES LIVRES
+========================================================= */
+
+.library-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 24px;
+}
+
+.library-actions .primary-btn {
+  min-width: 190px;
+}
+
+.books-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.book-item {
+  min-height: 150px;
+  padding: 22px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(216, 177, 111, 0.06),
+      rgba(255, 255, 255, 0.01)
+    ),
+    var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.book-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(216, 177, 111, 0.4);
+}
+
+.book-item .chapter-item-number {
+  margin-bottom: 8px;
+}
+
+.book-item .chapter-item-title {
+  font-size: 1.45rem;
+  line-height: 1.25;
+}
+
+.current-book-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 26px;
+}
+
+.current-book-actions button {
+  flex: 1 1 180px;
+}
+
+#currentBookTitle {
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   RESPONSIVE — BIBLIOTHÈQUE
+========================================================= */
+
+@media (max-width: 850px) {
+
+  .books-list {
+    grid-template-columns: 1fr;
+  }
+
+  .book-item {
+    min-height: 120px;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .library-actions {
+    display: block;
+  }
+
+  .library-actions .primary-btn {
+    width: 100%;
+  }
+
+  .current-book-actions {
+    flex-direction: column;
+  }
+
+  .current-book-actions button {
+    width: 100%;
+  }
+
+  .book-item {
+    padding: 18px;
+  }
+
+  .book-item .chapter-item-title {
+    font-size: 1.25rem;
+  }
+}
+
+
