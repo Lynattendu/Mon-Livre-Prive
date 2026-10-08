@@ -1,1 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
 
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Mon Livre Privé</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- =====================================================
+       ÉCRAN DE VERROUILLAGE
+  ====================================================== -->
+
+  <section id="lockScreen" class="screen active">
+
+    <div class="card lock-card">
+
+      <div class="lock-icon">🔒</div>
+
+      <h1>Mon Livre Privé</h1>
+
+      <p class="subtitle">
+        Entrez votre code pour ouvrir le livre
+      </p>
+
+      <input
+        type="password"
+        id="accessCode"
+        placeholder="Code d'accès"
+        autocomplete="off"
+      >
+
+      <button id="unlockBtn" class="primary-btn">
+        Ouvrir le livre
+      </button>
+
+      <p id="codeError" class="error-message"></p>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       ACCUEIL
+  ====================================================== -->
+
+  <section id="homeScreen" class="screen">
+
+    <div class="app-container">
+
+      <header class="main-header">
+
+        <div>
+          <p class="small-title">MON ESPACE D'ÉCRITURE</p>
+          <h1>Mon Livre</h1>
+        </div>
+
+        <button id="lockBtn" class="icon-btn">
+          🔒
+        </button>
+
+      </header>
+
+
+      <div class="home-menu">
+
+        <button id="newChapterBtn" class="menu-card">
+
+          <span class="menu-icon">✍️</span>
+
+          <span class="menu-text">
+            <strong>Nouveau chapitre</strong>
+            <small>Commencer à écrire</small>
+          </span>
+
+        </button>
+
+
+        <button id="chaptersBtn" class="menu-card">
+
+          <span class="menu-icon">📚</span>
+
+          <span class="menu-text">
+            <strong>Mes chapitres</strong>
+            <small>Lire et modifier</small>
+          </span>
+
+        </button>
+
+
+        <button id="backupBtn" class="menu-card">
+
+          <span class="menu-icon">💾</span>
+
+          <span class="menu-text">
+            <strong>Sauvegardes</strong>
+            <small>Exporter ou importer</small>
+          </span>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       NOUVEAU CHAPITRE
+  ====================================================== -->
+
+  <section id="editorScreen" class="screen">
+
+    <div class="app-container editor-container">
+
+      <header class="page-header">
+
+        <button class="back-home-btn">
+          ← Accueil
+        </button>
+
+        <h2 id="editorHeading">
+          Nouveau chapitre
+        </h2>
+
+      </header>
+
+
+      <div class="editor-form">
+
+        <label for="chapterNumber">
+          Numéro du chapitre
+        </label>
+
+        <input
+          type="number"
+          id="chapterNumber"
+          min="1"
+          placeholder="1"
+        >
+
+
+        <label for="chapterTitle">
+          Titre
+        </label>
+
+        <input
+          type="text"
+          id="chapterTitle"
+          placeholder="Titre du chapitre"
+        >
+
+
+        <label for="chapterText">
+          Texte
+        </label>
+
+        <textarea
+          id="chapterText"
+          placeholder="Commencez votre histoire..."
+        ></textarea>
+
+
+        <div class="editor-actions">
+
+          <button id="saveChapterBtn" class="primary-btn">
+            💾 Enregistrer
+          </button>
+
+          <button id="deleteChapterBtn" class="danger-btn hidden">
+            🗑️ Supprimer
+          </button>
+
+        </div>
+
+
+        <p id="saveMessage" class="save-message"></p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       LISTE DES CHAPITRES
+  ====================================================== -->
+
+  <section id="chaptersScreen" class="screen">
+
+    <div class="app-container">
+
+      <header class="page-header">
+
+        <button class="back-home-btn">
+          ← Accueil
+        </button>
+
+        <h2>Mes chapitres</h2>
+
+      </header>
+
+
+      <div class="search-zone">
+
+        <input
+          type="number"
+          id="searchChapterNumber"
+          min="1"
+          placeholder="Numéro du chapitre"
+        >
+
+        <button id="searchChapterBtn" class="secondary-btn">
+          Ouvrir
+        </button>
+
+      </div>
+
+
+      <div id="chaptersList" class="chapters-list">
+
+        <!-- Les chapitres seront ajoutés ici par JavaScript -->
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       LECTURE / MODIFICATION
+  ====================================================== -->
+
+  <section id="readerScreen" class="screen">
+
+    <div class="reader-container">
+
+      <header class="reader-header">
+
+        <button id="readerHomeBtn" class="back-home-btn">
+          ← Accueil
+        </button>
+
+        <button id="readerListBtn" class="secondary-btn small-btn">
+          📚 Chapitres
+        </button>
+
+      </header>
+
+
+      <div class="chapter-navigation">
+
+        <button id="previousChapterBtn">
+          ← Précédent
+        </button>
+
+        <button id="nextChapterBtn">
+          Suivant →
+        </button>
+
+      </div>
+
+
+      <div class="reader-title-zone">
+
+        <p id="readerChapterNumber"></p>
+
+        <input
+          type="text"
+          id="readerChapterTitle"
+          class="reader-title"
+        >
+
+      </div>
+
+
+      <textarea
+        id="readerChapterText"
+        class="reader-text"
+      ></textarea>
+
+
+      <div class="reader-actions">
+
+        <button id="saveReaderBtn" class="primary-btn">
+          💾 Enregistrer les modifications
+        </button>
+
+      </div>
+
+
+      <p id="readerSaveMessage" class="save-message"></p>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       SAUVEGARDES
+  ====================================================== -->
+
+  <section id="backupScreen" class="screen">
+
+    <div class="app-container">
+
+      <header class="page-header">
+
+        <button class="back-home-btn">
+          ← Accueil
+        </button>
+
+        <h2>Sauvegardes</h2>
+
+      </header>
+
+
+      <div class="backup-card">
+
+        <h3>💾 Exporter le livre</h3>
+
+        <p>
+          Crée un fichier contenant tous vos chapitres.
+        </p>
+
+        <button id="exportBtn" class="primary-btn">
+          Exporter une sauvegarde
+        </button>
+
+      </div>
+
+
+      <div class="backup-card">
+
+        <h3>📂 Importer une sauvegarde</h3>
+
+        <p>
+          Sélectionnez une ancienne sauvegarde de votre livre.
+        </p>
+
+        <input
+          type="file"
+          id="importFile"
+          accept=".json,application/json"
+        >
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       FENÊTRE D'IMPORTATION
+  ====================================================== -->
+
+  <div id="importModal" class="modal hidden">
+
+    <div class="modal-content">
+
+      <h3>Importer la sauvegarde</h3>
+
+      <p>
+        Que souhaitez-vous faire ?
+      </p>
+
+      <button id="mergeImportBtn" class="primary-btn">
+        Fusionner avec mon livre
+      </button>
+
+      <button id="replaceImportBtn" class="secondary-btn">
+        Remplacer mon livre
+      </button>
+
+      <button id="cancelImportBtn" class="text-btn">
+        Annuler
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       CONFIRMATION SUPPRESSION
+  ====================================================== -->
+
+  <div id="deleteModal" class="modal hidden">
+
+    <div class="modal-content">
+
+      <h3>Supprimer ce chapitre ?</h3>
+
+      <p>
+        Cette action est définitive si vous n'avez pas de sauvegarde.
+      </p>
+
+      <button id="confirmDeleteBtn" class="danger-btn">
+        Oui, supprimer
+      </button>
+
+      <button id="cancelDeleteBtn" class="secondary-btn">
+        Annuler
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>
